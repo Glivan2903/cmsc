@@ -5,6 +5,15 @@ import { Search, Trash2, Plus, Check, FileText, Phone, User, ShoppingCart, Refre
 import { getCentros, getConvenios, getProcedimentosPreco } from '../services/orcamento';
 import styles from './BudgetWizard.module.css';
 
+// Helper to normalize strings (remove accents and lowercase)
+const normalizeString = (str) => {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+};
+
 export default function BudgetWizard() {
   // Lists from API
   const [convenios, setConvenios] = useState([]);
@@ -121,13 +130,17 @@ export default function BudgetWizard() {
   const filteredProcedures = useMemo(() => {
     if (!procedures) return [];
     
+    const normalizedTerm = normalizeString(searchTerm);
+    
     return procedures.filter(p => {
-      // Filter by search term (code or description)
-      if (!searchTerm) return true;
-      const term = searchTerm.toLowerCase();
+      if (!normalizedTerm) return true;
+      
+      const normalizedProc = normalizeString(p.procedimento);
+      const normalizedCode = normalizeString(p.codProcedimento);
+      
       return (
-        p.procedimento.toLowerCase().includes(term) ||
-        p.codProcedimento.toLowerCase().includes(term)
+        normalizedProc.includes(normalizedTerm) ||
+        normalizedCode.includes(normalizedTerm)
       );
     }).slice(0, 50); // limit output size to prevent lag
   }, [procedures, searchTerm]);
