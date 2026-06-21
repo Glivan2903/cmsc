@@ -25,6 +25,7 @@ export default function Header() {
         <nav className={styles.desktopNav}>
           <Link href="/#sobre" className={styles.navLink}>Sobre Nós</Link>
           <Link href="/#especialidades" className={styles.navLink}>Especialidades</Link>
+          <Link href="/orcamento" className={styles.navLink}>Orçamento</Link>
           <Link href="/#contato" className={styles.navLink}>Contato</Link>
         </nav>
 
@@ -65,6 +66,13 @@ export default function Header() {
               onClick={() => setIsOpen(false)}
             >
               Especialidades
+            </Link>
+            <Link 
+              href="/orcamento" 
+              className={styles.mobileNavLink} 
+              onClick={() => setIsOpen(false)}
+            >
+              Orçamento
             </Link>
             <Link 
               href="/#contato" 
